@@ -1,0 +1,4 @@
+#!/bin/bash
+while [ 1 ]; do
+	/usr/bin/nc -e /home/root/motors -l -p 5050
+done

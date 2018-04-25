@@ -1,0 +1,98 @@
+function forward () {
+	if [ $moving_bwd -eq 1 ]; then
+		echo 0 > /sys/class/gpio/gpio47/value
+		sleep .00001
+		echo 0 > /sys/class/gpio/gpio48/value
+	elif [ $moving_fwd -eq 0 ]; then
+		echo 1 > /sys/class/gpio/gpio49/value
+		sleep .00001
+		echo 1 > /sys/class/gpio/gpio46/value
+	fi
+	moving_fwd=1
+	moving_bwd=0
+}
+function backward () {
+	if [ $moving_fwd -eq 1 ]; then
+		echo 0 > /sys/class/gpio/gpio46/value
+		sleep .00001
+		echo 0 > /sys/class/gpio/gpio49/value
+	elif [ $moving_bwd -eq 0 ]; then
+		echo 1 > /sys/class/gpio/gpio48/value
+		sleep .00001
+		echo 1 > /sys/class/gpio/gpio47/value
+	fi
+	moving_bwd=1
+	moving_fwd=0
+}
+function stop () {
+	echo 0 > /sys/class/gpio/gpio46/value
+	echo 0 > /sys/class/gpio/gpio47/value
+	echo 0 > /sys/class/gpio/gpio48/value
+	echo 0 > /sys/class/gpio/gpio49/value
+	moving_fwd=0
+	moving_bwd=0
+}
+function left () {
+	if [ $moving_fwd -eq 0 -a $moving_bwd -eq 0 ]; then
+		echo 1 > /sys/class/gpio/gpio46/value
+		sleep .3
+		echo 0 > /sys/class/gpio/gpio46/value
+	elif [ $moving_fwd -eq 1 ]; then
+		echo 0 > /sys/class/gpio/gpio49/value
+		sleep .3
+		echo 1 > /sys/class/gpio/gpio49/value
+	else
+		echo 0 > /sys/class/gpio/gpio48/value
+		sleep .3
+		echo 1 > /sys/class/gpio/gpio48/value
+	fi
+}
+function right () {
+	if [ $moving_fwd -eq 0 -a $moving_bwd -eq 0 ]; then
+		echo 1 > /sys/class/gpio/gpio49/value
+		sleep .3
+		echo 0 > /sys/class/gpio/gpio49/value
+	elif [ $moving_fwd -eq 1 ]; then
+		echo 0 > /sys/class/gpio/gpio46/value
+		sleep .3
+		echo 1 > /sys/class/gpio/gpio46/value
+	else
+		echo 0 > /sys/class/gpio/gpio47/value
+		sleep .3
+		echo 1 > /sys/class/gpio/gpio47/value
+	fi
+}
+
+function init () {
+	echo 46 > /sys/class/gpio/export
+	echo 47 > /sys/class/gpio/export
+	echo 48 > /sys/class/gpio/export
+	echo 49 > /sys/class/gpio/export
+	echo high > /sys/class/gpio/gpio46/direction
+	echo high > /sys/class/gpio/gpio47/direction
+	echo high > /sys/class/gpio/gpio48/direction
+	echo high > /sys/class/gpio/gpio49/direction
+}
+
+init
+stop
+while read c 
+do
+	case $c in 
+		f) forward
+	           ;;
+		b) backward
+	           ;;
+		s) stop
+		   ;;
+		r) right
+		   ;;
+		l) left
+		   ;;
+		q) stop
+		   exit 0
+		   ;;
+		*) echo Error!
+		   ;;
+	esac
+done

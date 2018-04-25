@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Enter Server Address</string>
+    <string name="hello1">Enter Server Port</string>
+    <string name="connect">Connect Beagle Car</string>
+    <string name="ipaddress_hint">Enter server IP eg 192.168.43.109</string>
+    <string name="portnumber_hint">Enter server port eg 5050</string> 
+    <string name="app_name">Beagle Car Control</string>
+    <string name="talk">Start Talking</string>
+    <string name="speak">hello</string>
+    <string name="name1">Enter Your Name</string>
+    <string name="name_hint">Enter your name</string>
+    <string name="msg_hint">Enter your message</string>
+    <string name="status">Status: </string>
+    
+</resources>
